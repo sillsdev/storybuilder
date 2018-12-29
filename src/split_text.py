@@ -39,6 +39,6 @@ def split_texts(story, book):
         start = list(map(int, re.split(nonnumber, page["ref_start"])))
         end = list(map(int, re.split(nonnumber, page["ref_end"])))
 
-        verse_pages.append(sum(flatten(book, start, end), ""))
+        verse_pages.append("".join(flatten(book, start, end)))
 
     return verse_pages

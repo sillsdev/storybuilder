@@ -12,10 +12,10 @@ def gen_book(bookfile):
     """
     book = []
     for line in bookfile:
-        if re.match("\\c", line):
+        if re.match(r"\\c", line):
             book.append([])
-        elif re.match("\\v", line):
-            book[-1].append(re.sub("\\v [0-9]+ ", "", line))
+        elif re.match(r"\\v", line):
+            book[-1].append(re.sub(r"\\v [0-9]+ ", "", line))
     return book
 
 
@@ -35,7 +35,7 @@ def split_texts(story, book):
     """
     verse_pages = []
     for page in story["pages"]:
-        nonnumber = "[^0-9]"
+        nonnumber = r"[^0-9]"
         start = list(map(int, re.split(nonnumber, page["ref_start"])))
         end = list(map(int, re.split(nonnumber, page["ref_end"])))
 

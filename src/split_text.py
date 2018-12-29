@@ -15,7 +15,7 @@ def gen_book(bookfile):
         if re.match(r"\\c", line):
             book.append([])
         elif re.match(r"\\v", line):
-            book[-1].append(re.sub(r"\\v [0-9]+ ", "", line))
+            book[-1].append(re.sub(r"\\v [0-9]+ ", "", line).strip())
     return book
 
 

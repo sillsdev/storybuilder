@@ -34,6 +34,7 @@ for i in range(len(data["storyCollection"])):
 	data["storyCollection"][i]["story"]["pages"] = process(data["storyCollection"][i]["story"]["pages"])
 
 # just some formatting for outut json
+
 def flatten(match):
     result = match.group(0)
     result = re.sub(r",\s+", ', ', result)

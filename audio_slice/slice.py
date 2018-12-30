@@ -135,7 +135,17 @@ def segment_story(story):
 			seg.export(filename, format="mp3")
 			print(filename)
 
+def get_timings(story):
+	start_end = []
+	t = 0
+	for p in story["pages"]:
+			seg = get_seg(p["ref_start"],p["ref_end"])
+			start_end.append((float(t)/1000.0,float(t+len(seg))/1000.0))
+			t = t +len(seg)
+	return start_end
+
 for story in stories["storyCollection"]:
+	#print(get_timings(story["story"]))
 	segment_story(story["story"])
 
 # print by verse

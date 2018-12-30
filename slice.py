@@ -127,6 +127,7 @@ def format_book_title(t):
 # produce audio files for a story
 def segment_story(story):
   durations = [] # in millis
+  filenames = []
   for p in story["pages"]:
       seg = get_seg(p["ref_start"],p["ref_end"])
       filename = "./outputs/{0}_{1:02d}.mp3".format(format_book_title(story["title"]),p["page"])
@@ -136,7 +137,8 @@ def segment_story(story):
       seg.export(filename, format="mp3")
       print(filename)
       durations.append(len(seg))
-  return durations
+      filenames.apppend(filename)
+  return filenames, durations
 
 if __name__ == "__main__":
   for story in stories["storyCollection"]:

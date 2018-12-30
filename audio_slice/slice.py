@@ -50,7 +50,7 @@ audio_src = [
 	"./inputs/mp3/44-JHNgul-21.mp3"
 ]
 
-pages_src = "./inputs/story_data_proc.json"
+pages_src = "./inputs/story_data.json"
 
 timing_raw = []
 pages_raw = ""

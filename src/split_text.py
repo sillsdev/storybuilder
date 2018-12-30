@@ -44,7 +44,7 @@ def split_texts(story, book):
         start = list(map(int, re.split(nonnumber, page["ref_start"])))
         end = list(map(int, re.split(nonnumber, page["ref_end"])))
 
-        verse_pages.append("".join(flatten(book, start, end)))
+        verse_pages.append(" ".join(flatten(book, start, end)))
 
     return verse_pages
 
@@ -62,12 +62,7 @@ def subtitle(story, book):
     timings = slice.get_timings(story)
     subtitle = ""
     for (ind, (page, timing)) in enumerate(zip(page_texts, timings)):
-        subtitle += """
-{}
-{} --> {}
-{}
-
-""".format(
+        "\n".join("{}\n{} --> {}\n{}".format(
             ind + 1, to_time_string(timing[0]), to_time_string(timing[1]), page
-        )
+        ))
     return subtitle

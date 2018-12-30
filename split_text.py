@@ -3,10 +3,7 @@
 
 import re
 
-import sys
-
-sys.path.insert(0, "../audio_slice")
-import slice
+import audio_slice as aud_slice
 
 
 def gen_book(bookfile):
@@ -73,7 +70,7 @@ def subtitle(story, book):
     that represents the appropriate contents of a srt file
     """
     page_texts = split_texts(story, book)
-    timings = slice.get_timings(story)
+    timings = aud_slice.get_timings(story)
     subtitle = ""
     for (ind, (page, timing)) in enumerate(zip(page_texts, timings)):
         "\n".join(

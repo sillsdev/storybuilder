@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import split_text as st
+import extract_motion, slice
 
 if __name__ == "__main__":
 
@@ -10,5 +11,7 @@ if __name__ == "__main__":
         story_collection = json.load(json_file)
         book_of_john = st.gen_book(john)
         for story in story_collection["storyCollection"]:
-            # beginnings of a proper test situation
-            print(len(st.split_texts(story["story"], book_of_john)))
+          # beginnings of a proper test situation
+          strings = st.split_texts(story["story"], book_of_john)
+          motions = extract_motion.extract(story)
+          segment_story(story["story"])

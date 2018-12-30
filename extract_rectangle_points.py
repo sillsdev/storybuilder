@@ -1,9 +1,10 @@
+# extract_rectangle_points
+# parse through story_data
 # Created by Terence Ho and Blake Bendock-Yang
 # December 29th 2018
+
 import json
 from pprint import pprint
-
-# parse through story_data
 
 
 with open("story_data.json") as data_file:
@@ -38,6 +39,22 @@ with open("story_data.json") as data_file:
 			# print(initialrectList)
 			# print(finalrectList)
 
-		# print(initialrectList[0][0]) # example: statement prints out x1 value
+		# calculate zoom values and add to list
+		counter = 0;
+		zoomValue = 0.00;
+		for i in range(len(initialrectList)):
+			zoomValue = float(1)/float(initialrectList[counter][3])
+			initialrectList[counter].remove(initialrectList[counter][3])
+			initialrectList[counter].remove(initialrectList[counter][2])
+			initialrectList[counter].append(zoomValue)
+
+			zoomValue = float(1)/float(finalrectList[counter][3])
+			finalrectList[counter].remove(finalrectList[counter][3])
+			finalrectList[counter].remove(finalrectList[counter][2])
+			finalrectList[counter].append(zoomValue)
+			counter += 1
+
+		# print(initialrectList[0][0]) # example: statement prints out x1 value [page#][x or y or z]
+
 		# storyCollectionList.append([storyCollectionCounter][initialrectList][finalrectList])
 		storyCollectionCounter += 1;

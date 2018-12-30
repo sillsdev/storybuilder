@@ -6,55 +6,65 @@
 import json
 from pprint import pprint
 
-
-with open("story_data.json") as data_file:
-	data = json.load(data_file)
-	
+class extract_rectangle_points:
 	storyCollectionList = []
+	initialrectList = []
+	finalrectList = []
 
-	storyCollectionCounter = 0;
-	for i in range(len(data)):
-		storyCollection = data["storyCollection"][storyCollectionCounter] # 0 = first section = "The Word"
-		# pprint(storyCollection)
-		for i in range(len(storyCollection)):
-			story = storyCollection["story"]
-			# pprint(story)
-			for i in range(len(story)):
-				pages = story["pages"]
+	def parse_data():
+		with open("story_data.json") as data_file:
+			data = json.load(data_file)
 			
-			index = 0
-			initialrectList = []
-			finalrectList = []
-			for i in range(len(pages)):
-				# print(pages[index]["img_initialrect"].split(" "))
 
-				initialrectList.append(pages[index]["img_initialrect"].split(" "))
-				finalrectList.append(pages[index]["img_finalrect"].split(" "))
 
-				# print("img_initialrect:       " + pages[index]["img_initialrect"])
-				# print("img_finalrect:         " + pages[index]["img_finalrect"])
-				index += 1;
+			storyCollectionCounter = 0;
+			for i in range(len(data)):
+				storyCollection = data["storyCollection"][storyCollectionCounter] # 0 = first section = "The Word"
+				# pprint(storyCollection)
+				for i in range(len(storyCollection)):
+					story = storyCollection["story"]
+					# pprint(story)
+					for i in range(len(story)):
+						pages = story["pages"]
+					
+					index = 0
+					initialrectList = []
+					finalrectList = []
+					for i in range(len(pages)):
+						# print(pages[index]["img_initialrect"].split(" "))
 
-			# Shows entire list
-			# print(initialrectList)
-			# print(finalrectList)
+						initialrectList.append(pages[index]["img_initialrect"].split(" "))
+						finalrectList.append(pages[index]["img_finalrect"].split(" "))
 
-		# calculate zoom values and add to list
-		counter = 0;
-		zoomValue = 0.00;
-		for i in range(len(initialrectList)):
-			zoomValue = float(1)/float(initialrectList[counter][3])
-			initialrectList[counter].remove(initialrectList[counter][3])
-			initialrectList[counter].remove(initialrectList[counter][2])
-			initialrectList[counter].append(zoomValue)
+						# print("img_initialrect:       " + pages[index]["img_initialrect"])
+						# print("img_finalrect:         " + pages[index]["img_finalrect"])
+						index += 1;
 
-			zoomValue = float(1)/float(finalrectList[counter][3])
-			finalrectList[counter].remove(finalrectList[counter][3])
-			finalrectList[counter].remove(finalrectList[counter][2])
-			finalrectList[counter].append(zoomValue)
-			counter += 1
+					# Shows entire list
+					# print(initialrectList)
+					# print(finalrectList)
 
-		# print(initialrectList[0][0]) # example: statement prints out x1 value [page#][x or y or z]
+				# calculate zoom values and add to list
+				counter = 0;
+				zoomValue = 0.00;
+				for i in range(len(initialrectList)):
+					zoomValue = float(1)/float(initialrectList[counter][3])
+					initialrectList[counter].remove(initialrectList[counter][3])
+					initialrectList[counter].remove(initialrectList[counter][2])
+					initialrectList[counter].append(zoomValue)
 
-		# storyCollectionList.append([storyCollectionCounter][initialrectList][finalrectList])
-		storyCollectionCounter += 1;
+					zoomValue = float(1)/float(finalrectList[counter][3])
+					finalrectList[counter].remove(finalrectList[counter][3])
+					finalrectList[counter].remove(finalrectList[counter][2])
+					finalrectList[counter].append(zoomValue)
+					counter += 1
+
+				# print(initialrectList[0][0]) # example: statement prints out x1 value [page#][x or y or z]
+
+				# storyCollectionList.append([storyCollectionCounter][initialrectList][finalrectList])
+				storyCollectionCounter += 1;
+	def getInitalRectList():
+		return initialrectList
+
+	def getFinalRectList():
+		return finalrectList

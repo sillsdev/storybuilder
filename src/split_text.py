@@ -26,11 +26,20 @@ def gen_book(bookfile):
 
 def flatten(double_list, start_pair, end_pair):
     """ flattens a list of lists from the start to the end """
-    return (
-        double_list[start_pair[0]][start_pair[1] :]
-        + sum(double_list[start_pair[0] + 1 : end_pair[0]], [])
-        + double_list[end_pair[0]][: end_pair[1]]
-    )
+
+    if start_pair[0] == end_pair[0]:
+        return double_list[start_pair[0]][start_pair[1] : end_pair[1]]
+    else:
+        return (
+            double_list[start_pair[0]][start_pair[1] :]
+            + sum(double_list[start_pair[0] + 1 : end_pair[0]], [])
+            + double_list[end_pair[0]][: end_pair[1] + 1]
+        )
+
+
+def to_index(string):
+    """ turns a one indexed string to a 0 indexed int """
+    return int(string) - 1
 
 
 def split_texts(story, book):
@@ -41,8 +50,8 @@ def split_texts(story, book):
     verse_pages = []
     for page in story["pages"]:
         nonnumber = r"[^0-9]"
-        start = list(map(int, re.split(nonnumber, page["ref_start"])))
-        end = list(map(int, re.split(nonnumber, page["ref_end"])))
+        start = list(map(to_index, re.split(nonnumber, page["ref_start"])))
+        end = list(map(to_index, re.split(nonnumber, page["ref_end"])))
 
         verse_pages.append(" ".join(flatten(book, start, end)))
 

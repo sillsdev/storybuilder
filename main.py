@@ -14,8 +14,8 @@ def assemble_page(soundfile, duration, text, image, motion, outfile):
 def stitch_pages(pages_filename, title, length):
   call(["ffmpeg", "-f", "concat", "-i", pages_filename, "-c", "copy", "outputs/"+title+".flv"])
 
-def get_image_list(pages):
-  return [page["img_src"] for page in pages]
+def get_image_list(story):
+  return [page["img_src"] for page in story["pages"]]
 
 if __name__ == "__main__":
 
@@ -29,10 +29,10 @@ if __name__ == "__main__":
           motions = extract_rectangle_points.parse_data(story)
           soundfiles, durations = sound_slice.segment_story(story["story"])
           images = get_image_list(story["story"])
-          assert( len(strings) == len(motions) == len(durations) == len(images) )
+          assert( len(soundfiles) == len(motions) == len(durations) == len(images) )
           pages_filename = "outputs/"+story["title"]+".pages.txt"
           with open(pages_filename, "w") as pagesfile:
-            for i in len(strings):
+            for i in len(images):
               filename = "outputs/"+story["title"]+str(i)+".flv"
               assemble_page(soundfiles[i], durations[i], strings[i], images[i], motions[i], )
               pagesfile.write("file '"+filename+"'")

@@ -4,7 +4,7 @@ import split_text as st
 
 if __name__ == "__main__":
 
-    with open("story_data.json", "r") as json_file, open(
+    with open("../audio_slice/inputs/story_data.json", "r") as json_file, open(
         "john.sfm", "r"
     ) as john:
         story_collection = json.load(json_file)

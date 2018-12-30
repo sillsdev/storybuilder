@@ -1,4 +1,5 @@
 *.DS_Store
 
-*.DS_Store
+json_preprocess/story_data_proc.json
+
 audio_slice/outputs/

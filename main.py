@@ -2,7 +2,7 @@
 import json
 from subprocess import call
 
-import split_text, extract_motion, sound_slice
+import split_text, extract_rectangle_points, sound_slice
 
 def assemble_page(soundfile, duration, text, image, motion, outfile):
 
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         book_of_john = split_text.gen_book(john)
         for story in story_collection["storyCollection"]:
           #strings = split_text.split_texts(story["story"], book_of_john)
-          motions = extract_motion.extract(story)
+          motions = extract_rectangle_points.parse_data(story)
           soundfiles, durations = sound_slice.segment_story(story["story"])
           images = get_image_list()
           assert( len(strings) == len(motions) == len(durations) == len(images) )

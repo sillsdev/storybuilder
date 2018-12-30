@@ -63,8 +63,8 @@ class extract_rectangle_points:
 
 				# storyCollectionList.append([storyCollectionCounter][initialrectList][finalrectList])
 				storyCollectionCounter += 1;
-	def getInitalRectList():
-		return initialrectList
+	def getInitalRectList(pageNum, position):
+		return initialrectList[pageNum][position]
 
-	def getFinalRectList():
-		return finalrectList
+	def getFinalRectList(pageNum, position):
+		return finalrectList[pageNum][position]

@@ -14,6 +14,9 @@ def assemble_page(soundfile, duration, text, image, motion, outfile):
 def stitch_pages(pages_filename, title, length):
   call(["ffmpeg", "-f", "concat", "-i", pages_filename, "-c", "copy", "outputs/"+title+".flv"])
 
+def get_image_list(pages):
+  return [page["img_src"] for page in pages]
+
 if __name__ == "__main__":
 
     with open("inputs/story_data.json", "r") as json_file, open(
@@ -25,7 +28,7 @@ if __name__ == "__main__":
           #strings = split_text.split_texts(story["story"], book_of_john)
           motions = extract_rectangle_points.parse_data(story)
           soundfiles, durations = sound_slice.segment_story(story["story"])
-          images = get_image_list()
+          images = get_image_list(story["story"])
           assert( len(strings) == len(motions) == len(durations) == len(images) )
           pages_filename = "outputs/"+story["title"]+".pages.txt"
           with open(pages_filename, "w") as pagesfile:

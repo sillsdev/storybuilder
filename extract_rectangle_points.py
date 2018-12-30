@@ -50,9 +50,10 @@ def parse_data(storyCollection):
     finalrectList[counter].remove(finalrectList[counter][3])
     finalrectList[counter].remove(finalrectList[counter][2])
     finalrectList[counter].append(zoomValue)
-    counter += 1
 
     output += tuple(initialrectList[counter] + finalrectList[counter])
+
+    counter += 1
 
   # print(initialrectList[0][0]) # example: statement prints out x1 value [page#][x or y or z]
 

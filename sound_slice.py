@@ -50,63 +50,71 @@ audio_src = [
   "./inputs/mp3/44-JHNgul-21.mp3"
 ]
 
+
+def get_audio(i):
+  if not audio[i]:
+    audio[i] = AudioSegment.from_mp3(audio_src[i])
+  return audio[i]
+
 pages_src = "./inputs/story_data.json"
 
 timing_raw = []
 pages_raw = ""
-audio = []
+audio = [None for _ in audio_src]
 
 for t in timing_src:
   with open(t) as file:
     timing_raw.append(file.read())
 
-for a in audio_src:
-  audio.append(AudioSegment.from_mp3(a))
+#for a in audio_src:
+#  audio.append(AudioSegment.from_mp3(a))
 
 with open(pages_src) as file:
   pages_raw = file.read()
 
-segments = []
+segments = [None] * len(timing_raw)
 
-for i in range(len(timing_raw)):
-  segments.append([])
+def get_segment(i):
 
-  raw = timing_raw[i]
-  raw = raw.replace('\ufeff','')
-  raw = raw.strip()
-  timings = raw.split("\n")
-  timings = [x.split("\t") for x in timings]
-  timings = [(float(x[0]), float(x[1]), x[2]) for x in timings]
-  timings = [(int(x[0] * 1000), int(x[1] * 1000), x[2]) for x in timings]
-  timings = [x for x in timings if x[2][0].isdigit()]
+  if not segments[i]:
 
-  #print(timings)
-  timings2 = []
+    segments[i] = []
 
-  curr_verse = 0
-  curr_start = 0
-  curr_end = 0
-  for x in timings:
-    verse = int(re.match(r"[0-9]+",x[2]).group(0))
-    if verse != curr_verse:
-      timings2.append((curr_start,curr_end,curr_verse))
-      curr_verse = verse
-      curr_start = x[0]
-    curr_end = x[1]
+    raw = timing_raw[i]
+    raw = raw.replace('\ufeff','')
+    raw = raw.strip()
+    timings = raw.split("\n")
+    timings = [x.split("\t") for x in timings]
+    timings = [(float(x[0]), float(x[1]), x[2]) for x in timings]
+    timings = [(int(x[0] * 1000), int(x[1] * 1000), x[2]) for x in timings]
+    timings = [x for x in timings if x[2][0].isdigit()]
 
-  timings2.append((curr_start,curr_end,curr_verse))
-  timings = timings2[1:]
+    #print(timings)
+    timings2 = []
 
-  for t in timings:
-    #print(t)
-    start = t[0]
-    end = t[1]
-    seg = audio[i][start:end]
-    segments[i].append(seg)
+    curr_verse = 0
+    curr_start = 0
+    curr_end = 0
+    for x in timings:
+      verse = int(re.match(r"[0-9]+",x[2]).group(0))
+      if verse != curr_verse:
+        timings2.append((curr_start,curr_end,curr_verse))
+        curr_verse = verse
+        curr_start = x[0]
+      curr_end = x[1]
 
-  #print(timings)
+    timings2.append((curr_start,curr_end,curr_verse))
+    timings = timings2[1:]
 
-stories = json.loads(pages_raw)
+    for t in timings:
+      #print(t)
+      start = t[0]
+      end = t[1]
+      seg = get_audio(i)[start:end]
+      segments[i].append(seg)
+
+  return segments[i]
+
 
 # assumes that start and end are in the same book
 def get_seg(ref_start,ref_end):
@@ -118,7 +126,7 @@ def get_seg(ref_start,ref_end):
   verse_end = int(m_end.group(2))
   #print(book,verse_start,verse_end)
   for verse in range(verse_start,verse_end+1):
-    seg += segments[book-1][verse-1]
+    seg += get_segment(book-1)[verse-1]
   return seg
 
 def format_book_title(t):
@@ -141,6 +149,7 @@ def segment_story(story):
   return filenames, durations
 
 if __name__ == "__main__":
+  stories = json.loads(pages_raw)
   for story in stories["storyCollection"]:
     segment_story(story["story"])
 

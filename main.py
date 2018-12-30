@@ -16,7 +16,7 @@ def stitch_pages(pages_filename, title, length):
 
 if __name__ == "__main__":
 
-    with open("story_data.json", "r") as json_file, open(
+    with open("inputs/story_data.json", "r") as json_file, open(
         "john.sfm", "r"
     ) as john:
         story_collection = json.load(json_file)

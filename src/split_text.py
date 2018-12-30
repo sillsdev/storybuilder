@@ -50,6 +50,7 @@ def split_texts(story, book):
 
 
 def to_time_string(seconds):
+    """ formats some float quantity of seconds as a time string """
     hours = seconds // (60 * 60)
     minutes = seconds // (60) % 60
     milliseconds = seconds * 1000 % 1000
@@ -58,11 +59,20 @@ def to_time_string(seconds):
 
 
 def subtitle(story, book):
+    """
+    turn a story json object and a the associated book into a single string
+    that represents the appropriate contents of a srt file
+    """
     page_texts = split_texts(story, book)
     timings = slice.get_timings(story)
     subtitle = ""
     for (ind, (page, timing)) in enumerate(zip(page_texts, timings)):
-        "\n".join("{}\n{} --> {}\n{}".format(
-            ind + 1, to_time_string(timing[0]), to_time_string(timing[1]), page
-        ))
+        "\n".join(
+            "{}\n{} --> {}\n{}".format(
+                ind + 1,
+                to_time_string(timing[0]),
+                to_time_string(timing[1]),
+                page,
+            )
+        )
     return subtitle

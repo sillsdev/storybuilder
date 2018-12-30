@@ -3,6 +3,11 @@
 
 import re
 
+import sys
+
+sys.path.insert(0, "../audio_slice")
+import slice
+
 
 def gen_book(bookfile):
     """
@@ -42,3 +47,27 @@ def split_texts(story, book):
         verse_pages.append("".join(flatten(book, start, end)))
 
     return verse_pages
+
+
+def to_time_string(seconds):
+    hours = seconds // (60 * 60)
+    minutes = seconds // (60) % 60
+    milliseconds = seconds * 1000 % 1000
+    seconds = int(seconds) % 60
+    return f"{hours}:{minutes}:{seconds}, {milliseconds}"
+
+
+def subtitle(story, book):
+    page_texts = split_texts(story, book)
+    timings = slice.get_timings(story)
+    subtitle = ""
+    for (ind, (page, timing)) in enumerate(zip(page_texts, timings)):
+        subtitle += """
+{}
+{} --> {}
+{}
+
+""".format(
+            ind + 1, to_time_string(timing[0]), to_time_string(timing[1]), page
+        )
+    return subtitle

@@ -145,7 +145,7 @@ def segment_story(story):
       seg.export(filename, format="mp3")
       print(filename)
       durations.append(len(seg))
-      filenames.apppend(filename)
+      filenames.append(filename)
   return filenames, durations
 
 if __name__ == "__main__":

@@ -51,7 +51,7 @@ def parse_data(storyCollection):
     finalrectList[counter].remove(finalrectList[counter][2])
     finalrectList[counter].append(zoomValue)
 
-    output += tuple(initialrectList[counter] + finalrectList[counter])
+    output.append(tuple(initialrectList[counter] + finalrectList[counter]))
 
     counter += 1
 

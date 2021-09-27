@@ -11,7 +11,7 @@ from pydub import AudioSegment
 import subprocess
 from timeit import default_timer as timer
 import glob
-import sh
+import os
 
 from pathlib import Path
 
@@ -36,6 +36,7 @@ fps = params["fps"]
 smooth_scale = params["smoothness"] # helps make the zoom less jittery. decrease this for better performance
 output_height = params["output_height"] # decrease for faster performance
 
+# ENHANCE: Does this function need to consider num_chapters? It currently doesn't.
 def make_movie(story):
 	title = format_book_title(story["title"])
 	final_tgt = video_folder / "{0}.mp4".format(title)
@@ -47,7 +48,7 @@ def make_movie(story):
 	#clean up old page fragments
 	temp_files = temp_folder.glob("*")
 	for file in temp_files:
-		sh.rm(file)
+		os.remove(file)
 	
 	#generate fragment video (01.mp4, 02.mp4...) per page
 	page_number = 1
@@ -112,7 +113,7 @@ def make_movie(story):
 		page_duration.append(duration)
 
 	#page list needed for concatenate command
-	pages_list = "\n".join(["file '{0}'".format(x) for x in output_files])
+	pages_list = "\n".join(["file '{0}/{1}'".format(temp_folder, x) for x in output_files])
 	pages_src = temp_folder / "pages.txt"
 
 	with open(pages_src,"w+") as file:
@@ -122,13 +123,14 @@ def make_movie(story):
 	#ffmpeg will ask to override, so we just remove it if it exists
 	try:
 		#pass
-		sh.rm(final_tgt)
+		os.remove(final_tgt)
 	except:
 		pass
 
 	combine_cmd = "ffmpeg -f concat -safe 0 -i {0} -c copy \"{1}\"".format(pages_src,final_tgt)
 	print("Concatenating...",end=' ',flush=True)
-	subprocess.run(combine_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	ffmpgResult = subprocess.run(combine_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	ffmpgResult.check_returncode()
 	print("done")
 	total_end = timer()
 	print("Done generating movie ({0:0.2f})".format(total_end - total_start))

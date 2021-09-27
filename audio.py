@@ -41,7 +41,7 @@ def load_book(book_data):
 	audio = []
 
 	for t in timing_src:
-		with open(t) as file:
+		with open(t, mode='r', encoding='utf-8-sig') as file:
 			timing_raw.append(file.read())
 
 	for a in audio_src:

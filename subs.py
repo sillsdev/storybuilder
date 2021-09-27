@@ -10,7 +10,7 @@ import re
 import subprocess
 from timeit import default_timer as timer
 import glob
-import sh
+import os
 
 from pathlib import Path
 
@@ -51,7 +51,8 @@ def strip_header(line):
 # load book data for a given book
 def load_book(book_data):
 	segments = []
-	book_raw = open(Path(book_data["text"])).read()
+	#UTF-8-sig allows opening files with byte order markers
+	book_raw = open(Path(book_data["text"]), "r", encoding="utf-8-sig").read()
 	book_lines = book_raw.split('\n')
 	for line in book_lines:
 		if line[:2] == "\\c":
@@ -148,7 +149,7 @@ def get_subs_aeneas(story,audio):
 
 	temp_files = aeneas_folder.glob("*")
 	for file in temp_files:
-		sh.rm(file)
+		os.remove(file)
 	#if len(temp_files) > 0:
 	#	sh.rm(temp_files)
 	
@@ -171,7 +172,7 @@ def get_subs_aeneas(story,audio):
 		page_chunks = get_chunk_text(page_text)
 		chunks += page_chunks
 
-	with open(text_src,"w+") as file:
+	with open(text_src,"w+", encoding="utf-8") as file:
 		file.write("\n".join([c.replace("\n",' ') for c in chunks]))
 		file.close()
 
@@ -184,7 +185,8 @@ def get_subs_aeneas(story,audio):
 
 	print("Generating {0}...".format(aeneas_align),end=' ',flush=True)
 	start_time = timer()
-	subprocess.run(cli_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	aeneas_result = subprocess.run(cli_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	aeneas_result.check_returncode
 	end_time = timer()
 	print("done ({0:0.2f})".format(end_time-start_time),flush=True)
 
@@ -238,7 +240,7 @@ def generate_srt(story):
 		sub_number += 1
 
 	output_text = "\n".join(output_segs)
-	file = open(output_tgt,"w+")
+	file = open(output_tgt,"w+", encoding="utf-8-sig")
 	file.write(output_text)
 	file.close()
 	print("Generating", output_tgt)
@@ -253,14 +255,16 @@ def transcode_subtitles(story):
 	#sub_src = "{0}/{1}.srt".format(srt_folder,title)
 	#output_tgt = "{0}/{1}_subbed.mp4".format(sub_video_folder,title)
 	
-	ffmpeg_cmd = "ffmpeg -i \"{0}\" -vf \"subtitles={1}\" -c:v {2} -c:a copy \"{3}\"".format(video_src, sub_src, video_codec, output_tgt)
+	# Note: For the subtitles component, single backslash is not recognized as a directory separator. Unfortunately, Windows paths use backslash. Replace them.
+	ffmpeg_cmd = "ffmpeg -i \"{0}\" -vf \"subtitles={1}\" -c:v {2} -c:a copy \"{3}\"".format(video_src, str(sub_src).replace("\\", "/"), video_codec, output_tgt)
 	try:
-		sh.rm(output_tgt)
+		os.remove(output_tgt)
 	except:
 		pass
 	print("Generating {0}...".format(output_tgt),end=' ',flush=True)
 	start_time = timer()
-	subprocess.run(ffmpeg_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	result = subprocess.run(ffmpeg_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	result.check_returncode()
 	end_time = timer()
 	print("done ({0:0.2f})".format(end_time-start_time),flush=True)
  

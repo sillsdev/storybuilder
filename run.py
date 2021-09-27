@@ -29,7 +29,8 @@ subs_cmd = "python3 subs.py {0}".format(param_file)
 def run_cmd(cmd_name, cmd):
 	start_time = timer()
 	print("Running {0}...".format(cmd_name))
-	subprocess.run(cmd, shell=True)
+	result = subprocess.run(cmd, shell=True)
+	result.check_returncode()
 	end_time = timer()
 	print("Running {0} done ({1:0.2f})".format(cmd_name, end_time-start_time))
 

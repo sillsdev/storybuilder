@@ -65,4 +65,4 @@ Right now, ref_begin and ref_end need to be in the same chapter. Verse reference
 
 # dependencies
 
-Need PyDub, ffmpeg, aeneas, sh libraries for python3
+Need PyDub, ffmpeg, aeneas (See https://github.com/sillsdev/aeneas-installer/releases/), pillow (for pil), and os libraries for python3

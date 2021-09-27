@@ -1,5 +1,5 @@
-*.DS_Store
-
-json_preprocess/story_data_proc.json
-
-audio_slice/outputs/
+**/.DS_Store
+SAB/*
+output/*
+temp/*
+*.jpg

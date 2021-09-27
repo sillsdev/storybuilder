@@ -1,5 +1,9 @@
 **/.DS_Store
+inputs.zip
+input/*
 SAB/*
 output/*
 temp/*
 *.jpg
+__pycache__
+__MACOSX

@@ -1,6 +1,10 @@
 # storybuilder
 Produces .mp4 of storybooks similar to bloom
 
+# setup
+Requires a inputs.zip file (not included).
+Run "Extract here" on inputs.zip such the zip extracts a "SAB" folder into the root and also writes some data into the "input" folder.
+
 # overview and usage
 The purpose of this project was to allow quick production, and more importantly, translation of bible stories for theoretically any language that has a working bible audio transcription. Storybuilder is meant to use SAB applications as input.
 

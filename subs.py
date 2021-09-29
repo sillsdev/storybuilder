@@ -181,11 +181,15 @@ def get_subs_aeneas(story,audio):
 		file.close()
 
 	params = "task_language=epo|is_text_type=plain|os_task_file_format=json|task_adjust_boundary_algorithm=percent|task_adjust_boundary_percent_value=50"
-	cli_cmd = "python -m aeneas.tools.execute_task {0} {1} \"{2}\" {3}".format(audio_src,text_src,params,aeneas_align)
+	cli_cmd = "python3 -m aeneas.tools.execute_task {0} {1} \"{2}\" {3}".format(audio_src,text_src,params,aeneas_align)
 
 	print("Generating {0}...".format(aeneas_align),end=' ',flush=True)
 	start_time = timer()
 	aeneas_result = subprocess.run(cli_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	if aeneas_result.returncode != 0:
+		# Some systems like python3, some like python. Just try both.
+		cli_cmd = cli_cmd.replace("python3", "python")
+		aeneas_result = subprocess.run(cli_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 	aeneas_result.check_returncode
 	end_time = timer()
 	print("done ({0:0.2f})".format(end_time-start_time),flush=True)

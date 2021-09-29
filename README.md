@@ -2,8 +2,12 @@
 Produces .mp4 of storybooks similar to bloom
 
 # setup
-Requires a inputs.zip file (not included).
-Run "Extract here" on inputs.zip such the zip extracts a "SAB" folder into the root and also writes some data into the "input" folder.
+* Requires a inputs.zip file (not included).
+* Run "Extract here" on inputs.zip such the zip extracts a "SAB" folder into the root and also writes some data into the "input" folder.
+* Requires Python3. Tested with Python 3.7
+* pip3 install PyDub (or sudo pip3 install PyDub)
+* pip3 install Pillow (or sudo ...)
+* Install aeneas from https://github.com/sillsdev/aeneas-installer/releases/
 
 # overview and usage
 The purpose of this project was to allow quick production, and more importantly, translation of bible stories for theoretically any language that has a working bible audio transcription. Storybuilder is meant to use SAB applications as input.
@@ -62,7 +66,3 @@ Finally, to hardcode the subs we use ffmpeg again. FFmpeg needs to be compiled u
 # limitations
 
 Right now, ref_begin and ref_end need to be in the same chapter. Verse references are done via counting; for example verse 38 is just the 37-index element of an array. This means that for some chapters where verses might be missing, e.g. Mark 9:45, storybuilder will fetch the wrong verses or crash by an index-out-of-range error.
-
-# dependencies
-
-Need PyDub, ffmpeg, aeneas (See https://github.com/sillsdev/aeneas-installer/releases/), pillow (for pil), and os libraries for python3

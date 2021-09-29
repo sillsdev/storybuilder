@@ -113,7 +113,14 @@ def make_movie(story):
 		page_duration.append(duration)
 
 	#page list needed for concatenate command
-	pages_list = "\n".join(["file '{0}/{1}'".format(temp_folder, x) for x in output_files])
+	if os.name == "nt":
+		# Windows
+		# ffmpeg will search for the files relative to where the command was run, so need to add the path to temp_folder
+		pages_list = "\n".join(["file '{0}/{1}'".format(temp_folder, x) for x in output_files])
+	else:
+		# Posix (Mac / Linux)
+		# on Mac at least, ffmpeg will be searching for the files in temp_folder already, so don't put the folder again.
+		pages_list = "\n".join(["file '{0}'".format(x) for x in output_files])
 	pages_src = temp_folder / "pages.txt"
 
 	with open(pages_src,"w+") as file:
